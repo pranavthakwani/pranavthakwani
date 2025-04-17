@@ -1,12 +1,14 @@
+
+<!-- Profile Picture -->
+<p align="center">
+  <img src="https://drive.google.com/uc?export=view&id=1v1enFDvMNedn29f54hpJz6BkItE9bm1n" width="1000" height="500" style="border-radius:50%" />
+</p>
+
 <!-- Profile Header -->
 <p align="center">
   <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=25&pause=1000&color=F78C6C&center=true&vCenter=true&width=435&lines=Hey!+I'm+Pranav+Thakwani;Software+Engineer+%7C+Builder;Learning+Product+%26+AI" />
 </p>
 
-<!-- Profile Picture -->
-<p align="center">
-  <img src="https://drive.google.com/uc?export=view&id=1uzulNyEuFJRzKrD3Zu2fMes-f0OztfUM" width="150" height="150" style="border-radius:50%" />
-</p>
 
 ---
 
