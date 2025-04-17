@@ -1,6 +1,6 @@
 <!-- Profile Header -->
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=25&pause=1000&color=F78C6C&center=true&vCenter=true&width=435&lines=Hey!+I'm+Pranav+Thakwani;Software+Engineer+%7C+Builder;Learning+Product+%26+AI;Let's+Build+Something+Great+Together!" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=25&pause=1000&color=F78C6C&center=true&vCenter=true&width=435&lines=Hey!+I'm+Pranav+Thakwani;Software+Engineer+%7C+Builder;Learning+Product+%26+AI" />
 </p>
 
 <!-- Profile Picture -->
@@ -10,7 +10,6 @@
 
 ---
 
-<h1 align="center">Hi 👋, I'm Pranav Thakwani</h1>
 <h3 align="center">A focused software engineer and aspiring product builder from India 🇮🇳</h3>
 
 ---
