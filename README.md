@@ -16,9 +16,8 @@
 
 - 🚀 Currently working on: **Building real-world apps, improving problem-solving & system design**
 - 🧠 Learning: **Product Management, Agentic AI, and Advanced Full-Stack Dev**
-- 🔥 Passionate about: **Building tech startups and solving real problems**
-- 🎯 Goal: **Grow VisualVerse into a global product and build wealth through innovation**
-- 💬 Ask me about: `React`, `Flutter`, `TypeScript`, `Python`, `AI/ML`, `Startups`
+- 🔥 Passionate about: **solving real problems**
+
 
 ---
 
@@ -43,13 +42,7 @@
 [![Instagram](https://img.shields.io/badge/-Instagram-E4405F?style=flat&logo=instagram&logoColor=white)](https://instagram.com/pranavthakwani)
 [![Twitter](https://img.shields.io/badge/-Twitter-1DA1F2?style=flat&logo=twitter&logoColor=white)](https://twitter.com/pranavthakwani)
 
----
 
-### 📌 Pinned Projects
-
-> 💡 Coming soon: **VisualVerse** – Bringing books to life through cinematic AI-powered animations.
-
----
 
 _“Discipline over motivation. Build what matters.”_
 
