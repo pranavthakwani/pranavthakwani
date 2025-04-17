@@ -1,7 +1,7 @@
 
 <!-- Profile Picture -->
 <p align="center">
-  <img src="https://drive.google.com/uc?export=view&id=1v1enFDvMNedn29f54hpJz6BkItE9bm1n" width="500" height="250" style="border-radius:50%" />
+  <img src="https://drive.google.com/uc?export=view&id=1v1enFDvMNedn29f54hpJz6BkItE9bm1n" width="400" height="200" style="border-radius:50%" />
 </p>
 
 <!-- Profile Header -->
