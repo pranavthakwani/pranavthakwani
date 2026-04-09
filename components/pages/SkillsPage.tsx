@@ -61,7 +61,7 @@ export function SkillsPage() {
   return (
     <CodeRenderer fileName="skills.json">
       <div className="max-w-6xl mx-auto">
-        <Comment>// skills.json - tech stack & tools I actually use</Comment>
+        <Comment>{"// skills.json - tech stack & tools I actually use"}</Comment>
 
         <motion.div
           initial={{ opacity: 0 }}
@@ -74,11 +74,11 @@ export function SkillsPage() {
             <span className="text-[#d4d4d4]">{'{'}</span>{' '}
             <span className="text-[#9cdcfe]">"status"</span>
             <span className="text-[#d4d4d4]">:</span>{' '}
-            <span className="text-[#ce9178]">"always_learning"</span>
+            <span className="text-[#ce9178]">&quot;always_learning&quot;</span>
             <span className="text-[#d4d4d4]">,</span>{' '}
-            <span className="text-[#9cdcfe]">"passion"</span>
+            <span className="text-[#9cdcfe]">&quot;passion&quot;</span>
             <span className="text-[#d4d4d4]">:</span>{' '}
-            <span className="text-[#ce9178]">"immeasurable"</span>{' '}
+            <span className="text-[#ce9178]">&quot;immeasurable&quot;</span>{' '}
             <span className="text-[#d4d4d4]">{'}'}</span>
           </p>
         </motion.div>

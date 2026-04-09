@@ -161,7 +161,7 @@ export function ProjectsPage() {
   return (
     <CodeRenderer fileName="projects.js">
       <div className="max-w-6xl mx-auto">
-        <Comment>// projects.js : things I've built & shipped</Comment>
+        <Comment>{"// projects.js : things I&apos;ve built & shipped"}</Comment>
 
         <motion.div
           initial={{ opacity: 0 }}

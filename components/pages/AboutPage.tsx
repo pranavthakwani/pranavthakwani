@@ -33,11 +33,11 @@ export function AboutPage() {
             <Tag>About Me</Tag>
           </h1>
 
-          <Comment>// Who I am · what I do · where I build</Comment>
+          <Comment>{"// Who I am · what I do · where I build"}</Comment>
 
           <div className="mt-8 space-y-6 text-[#d4d4d4] leading-relaxed">
             <p className="text-lg">
-              Hi! I'm <span className="text-[#4ec9b0] font-semibold">Pranav Thakwani</span>, a software developer living at the crossroads of{' '}
+              Hi! I&apos;m <span className="text-[#4ec9b0] font-semibold">Pranav Thakwani</span>, a software developer living at the crossroads of{' '}
               <span className="text-[#569cd6]">backend engineering</span>,{' '}
               <span className="text-[#569cd6]">AI/Automation</span>, and{' '}
               <span className="text-[#4ec9b0]">product management</span>. I love building systems that are not just functional but genuinely{' '}

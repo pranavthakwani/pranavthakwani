@@ -78,7 +78,7 @@ export function ContactPage() {
   return (
     <CodeRenderer fileName="contact.css">
       <div className="max-w-5xl mx-auto">
-        <Comment>/* contact.css - let's build something */</Comment>
+        <Comment>{"/* contact.css - let&apos;s build something */"}</Comment>
 
         <motion.div
           initial={{ opacity: 0 }}
@@ -87,7 +87,7 @@ export function ContactPage() {
           className="mt-8 mb-12"
         >
           <h1 className="text-4xl font-bold text-white mb-4">Contact</h1>
-          <Comment>// open to work, collabs & good conversations</Comment>
+          <Comment>{"// open to work, collabs & good conversations"}</Comment>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -135,7 +135,7 @@ export function ContactPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm text-[#858585] mb-2">
-                  <Comment>// YOUR_NAME *</Comment>
+                  <Comment>{"// YOUR_NAME *"}</Comment>
                 </label>
                 <input
                   type="text"
@@ -149,7 +149,7 @@ export function ContactPage() {
 
               <div>
                 <label className="block text-sm text-[#858585] mb-2">
-                  <Comment>// YOUR_EMAIL *</Comment>
+                  <Comment>{"// YOUR_EMAIL *"}</Comment>
                 </label>
                 <input
                   type="email"
@@ -163,7 +163,7 @@ export function ContactPage() {
 
               <div>
                 <label className="block text-sm text-[#858585] mb-2">
-                  <Comment>// SUBJECT</Comment>
+                  <Comment>{"// SUBJECT"}</Comment>
                 </label>
                 <input
                   type="text"
@@ -176,7 +176,7 @@ export function ContactPage() {
 
               <div>
                 <label className="block text-sm text-[#858585] mb-2">
-                  <Comment>// MESSAGE *</Comment>
+                  <Comment>{"// MESSAGE *"}</Comment>
                 </label>
                 <textarea
                   required
@@ -197,7 +197,7 @@ export function ContactPage() {
               </button>
 
               <p className="text-xs text-[#858585] text-center">
-                <Comment>// Powered by F0resques (lands directly in my inbox) :p</Comment>
+                <Comment>{"// Powered by F0resques (lands directly in my inbox) :p"}</Comment>
               </p>
             </form>
           </motion.div>

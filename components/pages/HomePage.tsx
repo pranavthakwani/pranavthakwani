@@ -29,7 +29,7 @@ export function HomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           {/* Main Content */}
           <div className="lg:col-span-2">
-            <Comment>// hello world !! Welcome to my portfolio</Comment>
+            <Comment>{"// hello world !! Welcome to my portfolio"}</Comment>
 
             <div className="mt-8 mb-12">
               <motion.h1

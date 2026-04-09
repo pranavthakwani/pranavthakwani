@@ -112,7 +112,7 @@ export function ExperiencePage() {
   return (
     <CodeRenderer fileName="experience.ts">
       <div className="max-w-4xl mx-auto">
-        <Comment>// experience.ts - where I've worked & what I've built</Comment>
+        <Comment>{"// experience.ts - where I&apos;ve worked & what I&apos;ve built"}</Comment>
 
         <motion.div
           initial={{ opacity: 0 }}
