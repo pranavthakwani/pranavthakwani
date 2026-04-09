@@ -1,7 +1,5 @@
 'use client';
 
-import { FaDribbble, FaTwitter, FaInstagram, FaGithub, FaLinkedin } from "react-icons/fa";
-
 interface ProfileCardProps {
   className?: string;
 }
@@ -61,26 +59,6 @@ export function ProfileCard({ className = "" }: ProfileCardProps) {
           </div>
         </div>
 
-        {/* Description */}
-        <p className="text-gray-600 text-center text-sm px-4">
-          A Software Engineer who has developed countless innovative solutions in AI/Automation, backend engineering, and product management.
-        </p>
-
-        {/* Social icons */}
-        <div className="flex justify-center gap-6 mt-6 text-blue-500 text-lg">
-          <a href="https://github.com/pranavthakwani" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition">
-            <FaGithub />
-          </a>
-          <a href="https://linkedin.com/in/pranavthakwani" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition">
-            <FaLinkedin />
-          </a>
-          <a href="https://instagram.com/pranavthakwani" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition">
-            <FaInstagram />
-          </a>
-          <a href="https://twitter.com/pranavthakwani" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition">
-            <FaTwitter />
-          </a>
-        </div>
       </div>
     </div>
   );
