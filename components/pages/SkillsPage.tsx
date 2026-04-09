@@ -72,7 +72,7 @@ export function SkillsPage() {
           <h1 className="text-4xl font-bold text-white mb-4">Skills</h1>
           <p className="text-[#858585]">
             <span className="text-[#d4d4d4]">{'{'}</span>{' '}
-            <span className="text-[#9cdcfe]">"status"</span>
+            <span className="text-[#9cdcfe]">&quot;status&quot;</span>
             <span className="text-[#d4d4d4]">:</span>{' '}
             <span className="text-[#ce9178]">&quot;always_learning&quot;</span>
             <span className="text-[#d4d4d4]">,</span>{' '}
