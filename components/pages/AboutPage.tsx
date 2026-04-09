@@ -90,14 +90,44 @@ export function AboutPage() {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <GraduationCap className="text-[#569cd6]" size={24} />
-                  <h3 className="text-xl font-bold text-white">SIES Graduate School of Technology</h3>
+                  <h3 className="text-xl font-bold text-white">Indian Institute of Technology, Patna</h3>
                 </div>
-                <span className="text-[#858585]">2021 - 2025</span>
+                <span className="text-[#858585]">Jun 2025 – Mar 2026</span>
               </div>
-              <p className="text-[#d4d4d4] mb-2">University of Mumbai</p>
-              <p className="text-[#569cd6] font-medium">Bachelor of Engineering in Computer Engineering</p>
-              <p className="text-[#4ec9b0] text-sm mt-2">Minors: Artificial Intelligence & Automation</p>
-              <p className="text-[#858585] text-sm mt-1">Focus: Product Management & System Design</p>
+              <p className="text-[#569cd6] font-medium">Product Management</p>
+            </div>
+
+            <div className="p-6 bg-[#252526] border border-[#3c3c3c] rounded">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <GraduationCap className="text-[#569cd6]" size={24} />
+                  <h3 className="text-xl font-bold text-white">Marwadi University</h3>
+                </div>
+                <span className="text-[#858585]">Sep 2021 – Jun 2025</span>
+              </div>
+              <p className="text-[#569cd6] font-medium">Bachelor of Technology - BTech, Computer Engineering</p>
+            </div>
+
+            <div className="p-6 bg-[#252526] border border-[#3c3c3c] rounded">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <GraduationCap className="text-[#569cd6]" size={24} />
+                  <h3 className="text-xl font-bold text-white">P.V. Modi High School</h3>
+                </div>
+                <span className="text-[#858585]">Jun 2019 – May 2021</span>
+              </div>
+              <p className="text-[#569cd6] font-medium">HSC, Science</p>
+            </div>
+
+            <div className="p-6 bg-[#252526] border border-[#3c3c3c] rounded">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <GraduationCap className="text-[#569cd6]" size={24} />
+                  <h3 className="text-xl font-bold text-white">P.V. Modi School</h3>
+                </div>
+                <span className="text-[#858585]">Jun 2009 – May 2019</span>
+              </div>
+              <p className="text-[#569cd6] font-medium">Primary & Secondary Education</p>
             </div>
           </div>
         </motion.div>

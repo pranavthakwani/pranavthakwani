@@ -1,11 +1,8 @@
-import { Metadata } from 'next';
-import { SkillsPage } from '@/components/pages/SkillsPage';
+import { SkillsPage as SkillsContent } from '@/components/pages/SkillsPage';
+import { buildPortfolioMetadata } from '@/lib/portfolio';
 
-export const metadata: Metadata = {
-  title: 'Skills - Pranav Thakwani',
-  description: 'Technical skills and expertise of Pranav Thakwani in backend engineering, AI/Automation, product management, and software development.',
-};
+export const metadata = buildPortfolioMetadata('skills');
 
-export default function Skills() {
-  return <SkillsPage />;
+export default function SkillsRoute() {
+  return <SkillsContent />;
 }

@@ -1,11 +1,8 @@
-import { Metadata } from 'next';
-import { ProjectsPage } from '@/components/pages/ProjectsPage';
+import { ProjectsPage as ProjectsContent } from '@/components/pages/ProjectsPage';
+import { buildPortfolioMetadata } from '@/lib/portfolio';
 
-export const metadata: Metadata = {
-  title: 'Projects - Pranav Thakwani',
-  description: 'Explore projects built by Pranav Thakwani, including AI applications, full-stack web apps, and social impact initiatives.',
-};
+export const metadata = buildPortfolioMetadata('projects');
 
-export default function Projects() {
-  return <ProjectsPage />;
+export default function ProjectsRoute() {
+  return <ProjectsContent />;
 }

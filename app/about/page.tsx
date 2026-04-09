@@ -1,11 +1,8 @@
-import { Metadata } from 'next';
-import { AboutPage } from '@/components/pages/AboutPage';
+import { AboutPage as AboutContent } from '@/components/pages/AboutPage';
+import { buildPortfolioMetadata } from '@/lib/portfolio';
 
-export const metadata: Metadata = {
-  title: 'About - Pranav Thakwani',
-  description: 'Learn more about Pranav Thakwani, a software developer specializing in backend engineering, AI/Automation, and product management.',
-};
+export const metadata = buildPortfolioMetadata('about');
 
-export default function About() {
-  return <AboutPage />;
+export default function AboutRoute() {
+  return <AboutContent />;
 }

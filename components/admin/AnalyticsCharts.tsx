@@ -1,165 +1,105 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import {
-  BarChart,
   Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
 } from 'recharts';
-import { AnalyticsData } from '@/lib/types';
+
+import { AnalyticsSummary } from '@/lib/types';
 
 interface AnalyticsChartsProps {
-  data: AnalyticsData;
+  data: AnalyticsSummary;
 }
 
-const COLORS = ['#007acc', '#4ec9b0', '#c586c0', '#ce9178', '#569cd6', '#dcdcaa'];
+const chartStyle = {
+  backgroundColor: '#1b1b1b',
+  border: '1px solid #2f2f2f',
+};
+
+function Heatmap({ data }: { data: AnalyticsSummary['heatmapPoints'] }) {
+  return (
+    <div className="relative h-72 overflow-hidden rounded-xl border border-[#2f2f2f] bg-[#111111]">
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:2.5rem_2.5rem]" />
+      {data.map((point, index) => (
+        <div
+          key={`${point.page}-${point.x}-${point.y}-${index}`}
+          className="absolute h-12 w-12 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(0,120,212,0.5),rgba(0,120,212,0.06)_70%,transparent_75%)]"
+          style={{
+            left: `${point.x * 100}%`,
+            top: `${point.y * 100}%`,
+            opacity: Math.min(1, point.value / 4),
+          }}
+        />
+      ))}
+      <div className="absolute bottom-3 right-3 rounded bg-black/40 px-2 py-1 text-[11px] text-[var(--vscode-muted)]">
+        {data.length} clustered points
+      </div>
+    </div>
+  );
+}
 
 export function AnalyticsCharts({ data }: AnalyticsChartsProps) {
-  // Prepare data for charts
-  const pageViewsData = Object.entries(data.pageViews).map(([page, views]) => ({
-    name: page === '/' ? 'home' : page.replace('/', ''),
-    views,
-  }));
-
-  const fileClicksData = Object.entries(data.fileClicks).map(([file, clicks]) => ({
-    name: file,
-    clicks,
-  }));
-
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {/* Page Views Bar Chart */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="bg-[#252526] border border-[#3c3c3c] rounded-lg p-6"
-      >
-        <h2 className="text-lg font-semibold text-white mb-4">Page Views</h2>
-        <div className="h-64">
+    <div className="grid gap-6 xl:grid-cols-2">
+      <section className="rounded-xl p-5" style={chartStyle}>
+        <h2 className="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-white">
+          Route Views
+        </h2>
+        <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={pageViewsData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#3c3c3c" />
-              <XAxis 
-                dataKey="name" 
-                stroke="#858585" 
-                tick={{ fill: '#858585', fontSize: 12 }}
-              />
-              <YAxis 
-                stroke="#858585" 
-                tick={{ fill: '#858585', fontSize: 12 }}
-              />
+            <BarChart data={data.pageViews}>
+              <CartesianGrid stroke="#272727" vertical={false} />
+              <XAxis dataKey="page" stroke="#8c8c8c" tick={{ fill: '#8c8c8c', fontSize: 12 }} />
+              <YAxis stroke="#8c8c8c" tick={{ fill: '#8c8c8c', fontSize: 12 }} />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#252526',
-                  border: '1px solid #3c3c3c',
-                  borderRadius: '4px',
+                  backgroundColor: '#111111',
+                  border: '1px solid #2f2f2f',
+                  borderRadius: '10px',
                   color: '#d4d4d4',
                 }}
               />
-              <Bar dataKey="views" fill="#007acc" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="views" fill="#0078d4" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </motion.div>
+      </section>
 
-      {/* File Clicks Pie Chart */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="bg-[#252526] border border-[#3c3c3c] rounded-lg p-6"
-      >
-        <h2 className="text-lg font-semibold text-white mb-4">File Interactions</h2>
-        <div className="h-64">
+      <section className="rounded-xl p-5" style={chartStyle}>
+        <h2 className="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-white">
+          File Clicks
+        </h2>
+        <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={fileClicksData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="clicks"
-              >
-                {fileClicksData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
+            <BarChart data={data.fileClicks}>
+              <CartesianGrid stroke="#272727" vertical={false} />
+              <XAxis dataKey="name" stroke="#8c8c8c" tick={{ fill: '#8c8c8c', fontSize: 12 }} />
+              <YAxis stroke="#8c8c8c" tick={{ fill: '#8c8c8c', fontSize: 12 }} />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#252526',
-                  border: '1px solid #3c3c3c',
-                  borderRadius: '4px',
+                  backgroundColor: '#111111',
+                  border: '1px solid #2f2f2f',
+                  borderRadius: '10px',
                   color: '#d4d4d4',
                 }}
               />
-            </PieChart>
+              <Bar dataKey="clicks" fill="#4ec9b0" radius={[6, 6, 0, 0]} />
+            </BarChart>
           </ResponsiveContainer>
         </div>
-      </motion.div>
+      </section>
 
-      {/* Trend Line Chart (Mock Data) */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="bg-[#252526] border border-[#3c3c3c] rounded-lg p-6 lg:col-span-2"
-      >
-        <h2 className="text-lg font-semibold text-white mb-4">Visit Trends (Last 7 Days)</h2>
-        <div className="h-64">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={[
-                { day: 'Mon', visits: 120 },
-                { day: 'Tue', visits: 180 },
-                { day: 'Wed', visits: 150 },
-                { day: 'Thu', visits: 220 },
-                { day: 'Fri', visits: 280 },
-                { day: 'Sat', visits: 190 },
-                { day: 'Sun', visits: 107 },
-              ]}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#3c3c3c" />
-              <XAxis 
-                dataKey="day" 
-                stroke="#858585" 
-                tick={{ fill: '#858585', fontSize: 12 }}
-              />
-              <YAxis 
-                stroke="#858585" 
-                tick={{ fill: '#858585', fontSize: 12 }}
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: '#252526',
-                  border: '1px solid #3c3c3c',
-                  borderRadius: '4px',
-                  color: '#d4d4d4',
-                }}
-              />
-              <Line
-                type="monotone"
-                dataKey="visits"
-                stroke="#007acc"
-                strokeWidth={2}
-                dot={{ fill: '#007acc' }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </motion.div>
+      <section className="rounded-xl p-5 xl:col-span-2" style={chartStyle}>
+        <h2 className="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-white">
+          Interaction Heatmap
+        </h2>
+        <Heatmap data={data.heatmapPoints} />
+      </section>
     </div>
   );
 }

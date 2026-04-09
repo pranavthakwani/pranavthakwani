@@ -1,73 +1,90 @@
 'use client';
 
-import { GitBranch, CircleAlert as AlertCircle, Sparkles } from 'lucide-react';
-import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { Bell, Check, GitBranch, Sparkles, TerminalSquare } from 'lucide-react';
 
-export function StatusBar() {
-  const pathname = usePathname();
+import { FileItem } from '@/lib/types';
+
+interface StatusBarProps {
+  currentFile: FileItem;
+  isChatOpen: boolean;
+  isTerminalOpen: boolean;
+  onToggleChat: (event?: React.MouseEvent<HTMLButtonElement>) => void;
+  onToggleTerminal: (event?: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+const languageLabel: Record<FileItem['type'], string> = {
+  tsx: 'TypeScript React',
+  html: 'HTML',
+  js: 'JavaScript',
+  json: 'JSON',
+  ts: 'TypeScript',
+  css: 'CSS',
+  md: 'Markdown',
+};
+
+export function StatusBar({
+  currentFile,
+  isChatOpen,
+  isTerminalOpen,
+  onToggleChat,
+  onToggleTerminal,
+}: StatusBarProps) {
   const [time, setTime] = useState('');
-  const [copilotStatus, setCopilotStatus] = useState(false);
 
   useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      setTime(now.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-      }));
+    const tick = () => {
+      setTime(
+        new Date().toLocaleTimeString('en-GB', {
+          hour: '2-digit',
+          minute: '2-digit',
+        })
+      );
     };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
+
+    tick();
+    const timer = window.setInterval(tick, 1000);
+    return () => window.clearInterval(timer);
   }, []);
 
-  const getLanguageFromPath = () => {
-    const langMap: Record<string, string> = {
-      '/': 'TypeScript React',
-      '/about': 'HTML',
-      '/projects': 'JavaScript',
-      '/skills': 'JSON',
-      '/experience': 'TypeScript',
-      '/contact': 'CSS',
-    };
-    return langMap[pathname] || 'TypeScript React';
-  };
-
   return (
-    <div className="bg-[#007acc] text-white text-xs flex items-center justify-between px-4 py-1 h-6">
+    <footer className="flex h-6 items-center justify-between bg-[var(--vscode-status)] px-3 text-[11px] text-white">
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-1.5 hover:bg-[#0098ff] px-2 py-0.5 rounded cursor-pointer transition-colors">
-          <GitBranch size={14} />
-          <span className="font-medium">main</span>
+        <div className="flex items-center gap-1">
+          <GitBranch size={12} />
+          <span>main</span>
         </div>
-
-        <div className="flex items-center gap-1.5">
-          <AlertCircle size={14} />
-          <span>0</span>
+        <div className="flex items-center gap-1">
+          <Check size={12} />
+          <span>0 issues</span>
         </div>
+        <span>{currentFile.workspacePath}</span>
       </div>
 
       <div className="flex items-center gap-4">
         <button
-          onClick={() => setCopilotStatus(!copilotStatus)}
-          className={`flex items-center gap-1.5 px-2 py-0.5 rounded transition-colors ${
-            copilotStatus ? 'bg-[#0098ff]' : 'hover:bg-[#0098ff]'
-          }`}
+          type="button"
+          onClick={onToggleTerminal}
+          className="flex items-center gap-1 rounded px-1.5 py-0.5 hover:bg-[#1a8cff]/30"
         >
-          <Sparkles size={14} className={copilotStatus ? 'fill-current' : ''} />
-          <span>Copilot</span>
+          <TerminalSquare size={12} />
+          <span>{isTerminalOpen ? 'Terminal open' : 'Terminal hidden'}</span>
         </button>
-
-        <span className="font-medium">{getLanguageFromPath()}</span>
-
+        <button
+          type="button"
+          onClick={onToggleChat}
+          className="flex items-center gap-1 rounded px-1.5 py-0.5 hover:bg-[#1a8cff]/30"
+        >
+          <Sparkles size={12} />
+          <span>{isChatOpen ? 'Assistant ready' : 'Assistant hidden'}</span>
+        </button>
+        <span>{languageLabel[currentFile.type]}</span>
         <span>UTF-8</span>
-
-        <span className="font-medium">Prettier</span>
-
-        <span className="font-mono">{time}</span>
+        <div className="flex items-center gap-1">
+          <Bell size={12} />
+          <span>{time}</span>
+        </div>
       </div>
-    </div>
+    </footer>
   );
 }

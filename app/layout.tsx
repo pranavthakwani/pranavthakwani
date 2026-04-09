@@ -1,50 +1,40 @@
 import './globals.css';
+
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { JetBrains_Mono } from 'next/font/google';
+
 import { VSCodeLayout } from '@/components/layout/VSCodeLayout';
 
-const inter = Inter({ subsets: ['latin'] });
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-editor',
+});
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pranavthakwani.dev';
 
 export const metadata: Metadata = {
-  title: 'Pranav Thakwani - Backend Engineer, AI/Automation Developer, Product Enthusiast',
-  description: 'Software developer specializing in backend engineering, AI/Automation, and product management. Building intelligent and scalable systems at KORE Mobile.',
-  keywords: [
-    'Pranav Thakwani',
-    'Software Developer',
-    'Backend Engineer',
-    'AI/Automation Developer',
-    'Product Enthusiast',
-    'LangChain',
-    'RAG',
-    'Python',
-    'FastAPI',
-    'KORE Mobile',
-  ],
-  authors: [{ name: 'Pranav Thakwani' }],
+  metadataBase: new URL(siteUrl),
+  title: 'Pranav Thakwani | Developer Portfolio',
+  description:
+    'A VS Code-inspired developer portfolio featuring interactive navigation, portfolio chat, analytics, and an admin dashboard.',
   icons: {
     icon: '/favicon.png',
     shortcut: '/favicon.png',
     apple: '/favicon.png',
   },
   openGraph: {
-    title: 'Pranav Thakwani - Portfolio',
-    description: 'Backend Engineer, AI/Automation Developer, Product Enthusiast',
+    title: 'Pranav Thakwani | Developer Portfolio',
+    description:
+      'A VS Code-inspired developer portfolio featuring interactive navigation, portfolio chat, analytics, and an admin dashboard.',
     type: 'website',
-    images: [
-      {
-        url: 'https://bolt.new/static/og_default.png',
-      },
-    ],
+    images: [{ url: '/favicon.png' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Pranav Thakwani - Portfolio',
-    description: 'Backend Engineer, AI/Automation Developer, Product Enthusiast',
-    images: [
-      {
-        url: 'https://bolt.new/static/og_default.png',
-      },
-    ],
+    title: 'Pranav Thakwani | Developer Portfolio',
+    description:
+      'A VS Code-inspired developer portfolio featuring interactive navigation, portfolio chat, analytics, and an admin dashboard.',
+    images: ['/favicon.png'],
   },
 };
 
@@ -54,8 +44,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={jetbrainsMono.variable}>
+      <body className={`${jetbrainsMono.className} h-full bg-[#1e1e1e]`}>
         <VSCodeLayout>{children}</VSCodeLayout>
       </body>
     </html>

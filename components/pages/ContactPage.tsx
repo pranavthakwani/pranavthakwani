@@ -35,14 +35,7 @@ export function ContactPage() {
       url: 'https://github.com/pranavthakwani',
       color: '#ffffff',
     },
-    {
-      icon: Code2,
-      label: 'MEDIUM',
-      value: 'medium.com/@pranavthakwani',
-      url: 'https://medium.com/@pranavthakwani',
-      color: '#00ab6c',
-    },
-    {
+        {
       icon: Code2,
       label: 'TABLEAU',
       value: 'Tableau Public Vizzes',

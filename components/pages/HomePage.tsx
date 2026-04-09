@@ -83,10 +83,17 @@ export function HomePage() {
               </p>
 
               <p className="text-lg">
-                I live at the crossroads of <span className="text-[#569cd6]">backend engineering</span>,{' '}
-                <span className="text-[#569cd6]">AI/Automation</span>, and{' '}
-                <span className="text-[#4ec9b0]">product management</span>. I build systems that are genuinely{' '}
-                <span className="text-[#ce9178]">intelligent and scalable</span>.
+                I am focused on developing products that combine <span className="text-[#569cd6]">practical tech</span>,{' '}
+                <span className="text-[#569cd6]">user experience</span>, and{' '}
+                <span className="text-[#4ec9b0]">strategic thinking</span>. My emphasis is on{' '}
+                <span className="text-[#ce9178]">understanding users</span>, addressing meaningful challenges, and shaping concepts into{' '}
+                <span className="text-[#569cd6]">scalable digital experiences</span>.
+              </p>
+
+              <p className="text-lg">
+                I am currently enhancing my expertise in <span className="text-[#569cd6]">product management</span> and{' '}
+                <span className="text-[#569cd6]">AI-driven automation</span> to create thoughtful,{' '}
+                <span className="text-[#4ec9b0]">user-centric products</span> with lasting impact.
               </p>
             </motion.div>
 

@@ -1,11 +1,8 @@
-import { Metadata } from 'next';
-import { ContactPage } from '@/components/pages/ContactPage';
+import { ContactPage as ContactContent } from '@/components/pages/ContactPage';
+import { buildPortfolioMetadata } from '@/lib/portfolio';
 
-export const metadata: Metadata = {
-  title: 'Contact - Pranav Thakwani',
-  description: 'Get in touch with Pranav Thakwani for collaboration opportunities, project inquiries, or networking.',
-};
+export const metadata = buildPortfolioMetadata('contact');
 
-export default function Contact() {
-  return <ContactPage />;
+export default function ContactRoute() {
+  return <ContactContent />;
 }

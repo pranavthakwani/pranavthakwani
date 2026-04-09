@@ -1,95 +1,79 @@
-import { supabase } from './supabase';
-import { AnalyticsEvent } from './types';
+'use client';
 
-let sessionId: string | null = null;
-const USE_API_ENDPOINT = false; // Set to true to use API endpoint instead of direct Supabase
+import { AnalyticsEvent, AnalyticsEventType } from '@/lib/types';
 
-function getSessionId(): string {
-  if (typeof window === 'undefined') return '';
+const SESSION_STORAGE_KEY = 'portfolio.session.id';
 
-  if (!sessionId) {
-    sessionId = sessionStorage.getItem('portfolio_session_id');
-    if (!sessionId) {
-      sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      sessionStorage.setItem('portfolio_session_id', sessionId);
-    }
+function getSessionId() {
+  if (typeof window === 'undefined') {
+    return '';
   }
-  return sessionId;
+
+  const existing = window.sessionStorage.getItem(SESSION_STORAGE_KEY);
+  if (existing) {
+    return existing;
+  }
+
+  const created = `session_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+  window.sessionStorage.setItem(SESSION_STORAGE_KEY, created);
+  return created;
 }
 
-export async function trackEvent(event: AnalyticsEvent) {
-  if (typeof window === 'undefined') return;
+function sendAnalytics(payload: AnalyticsEvent) {
+  const body = JSON.stringify(payload);
 
-  const eventData = {
-    event_type: event.event_type,
-    page: event.page,
-    metadata: event.metadata || {},
-    session_id: getSessionId(),
-    user_agent: navigator.userAgent,
+  if (typeof navigator !== 'undefined' && 'sendBeacon' in navigator) {
+    const blob = new Blob([body], { type: 'application/json' });
+    navigator.sendBeacon('/api/track', blob);
+    return;
+  }
+
+  void fetch('/api/track', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body,
+    keepalive: true,
+  });
+}
+
+export function pointerMetadata(event?: MouseEvent | PointerEvent | React.MouseEvent<HTMLElement>) {
+  const nativeEvent = event && 'nativeEvent' in event ? event.nativeEvent : event;
+
+  if (!nativeEvent) {
+    return {};
+  }
+
+  return {
+    x: Number((nativeEvent.clientX / window.innerWidth).toFixed(4)),
+    y: Number((nativeEvent.clientY / window.innerHeight).toFixed(4)),
   };
+}
 
-  try {
-    if (USE_API_ENDPOINT) {
-      // Use API endpoint
-      const response = await fetch('/api/track', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(eventData),
-      });
-
-      if (!response.ok) {
-        console.error('Analytics tracking error:', await response.text());
-      }
-    } else {
-      // Use direct Supabase
-      const { error } = await supabase.from('analytics_events').insert(eventData);
-
-      if (error) {
-        console.error('Analytics tracking error:', error);
-      }
-    }
-  } catch (err) {
-    console.error('Analytics error:', err);
+export function trackEvent(type: AnalyticsEventType, page: string, metadata: Record<string, unknown> = {}) {
+  if (typeof window === 'undefined') {
+    return;
   }
-}
 
-export function trackPageView(page: string) {
-  trackEvent({
-    event_type: 'page_view',
+  sendAnalytics({
+    type,
     page,
+    metadata,
+    timestamp: Date.now(),
+    sessionId: getSessionId(),
+    userAgent: navigator.userAgent,
   });
 }
 
-export function trackFileClick(fileName: string, path: string) {
-  trackEvent({
-    event_type: 'file_click',
-    page: path,
-    metadata: { fileName },
-  });
+export function trackPageView(page: string, metadata: Record<string, unknown> = {}) {
+  trackEvent('view', page, metadata);
 }
 
-export function trackChatInteraction(question: string, answer: string) {
-  trackEvent({
-    event_type: 'chat_interaction',
-    page: window.location.pathname,
-    metadata: { question, answer },
-  });
+export function trackClick(page: string, metadata: Record<string, unknown> = {}) {
+  trackEvent('click', page, metadata);
 }
 
-export function trackButtonClick(buttonName: string, page: string) {
-  trackEvent({
-    event_type: 'button_click',
-    page,
-    metadata: { buttonName },
-  });
-}
-
-export function trackTabClose(fileName: string) {
-  trackEvent({
-    event_type: 'tab_close',
-    page: window.location.pathname,
-    metadata: { fileName },
-  });
+export function trackChat(page: string, metadata: Record<string, unknown> = {}) {
+  trackEvent('chat', page, metadata);
 }

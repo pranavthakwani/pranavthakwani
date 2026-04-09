@@ -6,44 +6,54 @@ import { motion } from 'framer-motion';
 export function SkillsPage() {
   const skillCategories = [
     {
-      title: 'LANGUAGES',
+      title: 'PROGRAMMING LANGUAGES',
       skills: [
-        { name: 'Python', level: 92, color: '#c586c0' },
-        { name: 'Java', level: 72, color: '#ce9178' },
-        { name: 'JavaScript', level: 70, color: '#dcdcaa' },
-        { name: 'TypeScript', level: 74, color: '#569cd6' },
+        { name: 'JavaScript', level: 95, color: '#dcdcaa' },
+        { name: 'Python', level: 90, color: '#c586c0' },
+        { name: 'Java', level: 85, color: '#ce9178' },
+        { name: 'TypeScript', level: 80, color: '#569cd6' },
         { name: 'SQL', level: 88, color: '#c586c0' },
       ],
     },
     {
-      title: 'GENERATIVE AI & LLM ENGINEERING',
+      title: 'AI & MACHINE LEARNING',
       skills: [
-        { name: 'LangChain', level: 82, color: '#4ec9b0' },
-        { name: 'LangGraph', level: 70, color: '#4ec9b0' },
-        { name: 'RAG Pipelines', level: 85, color: '#569cd6' },
-        { name: 'Prompt Engineering', level: 96, color: '#dcdcaa' },
-        { name: 'Agentic Workflows', level: 89, color: '#c586c0' },
-        { name: 'Hugging Face Transformers', level: 83, color: '#ce9178' },
+        { name: 'RAG Systems', level: 92, color: '#4ec9b0' },
+        { name: 'LLM Operations', level: 88, color: '#569cd6' },
+        { name: 'Computer Vision', level: 85, color: '#ce9178' },
+        { name: 'CNN Architectures', level: 82, color: '#c586c0' },
+        { name: 'Data Classification', level: 90, color: '#dcdcaa' },
+        { name: 'Feature Engineering', level: 87, color: '#4ec9b0' },
       ],
     },
     {
-      title: 'AI · ML · DATA SCIENCE',
+      title: 'BACKEND & AUTOMATION',
       skills: [
-        { name: 'PyTorch', level: 85, color: '#ce9178' },
-        { name: 'TensorFlow', level: 80, color: '#ce9178' },
-        { name: 'scikit-learn', level: 90, color: '#dcdcaa' },
-        { name: 'Pandas', level: 88, color: '#569cd6' },
-        { name: 'NumPy', level: 86, color: '#569cd6' },
-        { name: 'spaCy', level: 80, color: '#4ec9b0' },
-        { name: 'NLTK', level: 75, color: '#569cd6' },
+        { name: 'Node.js', level: 92, color: '#4ec9b0' },
+        { name: 'FastAPI', level: 88, color: '#569cd6' },
+        { name: 'Flask', level: 85, color: '#c586c0' },
+        { name: 'Automation Workflows', level: 94, color: '#dcdcaa' },
+        { name: 'API Development', level: 90, color: '#4ec9b0' },
+        { name: 'Data Processing', level: 87, color: '#569cd6' },
       ],
     },
     {
-      title: 'BACKEND & APIS',
+      title: 'FRONTEND & MOBILE',
       skills: [
-        { name: 'FastAPI', level: 90, color: '#4ec9b0' },
-        { name: 'Flask', level: 82, color: '#569cd6' },
-        { name: 'Django', level: 76, color: '#4ec9b0' },
+        { name: 'React.js', level: 88, color: '#4ec9b0' },
+        { name: 'Next.js', level: 82, color: '#c586c0' },
+        { name: 'Responsive Design', level: 90, color: '#4ec9b0' },
+      ],
+    },
+    {
+      title: 'TOOLS & PLATFORMS',
+      skills: [
+        { name: 'MongoDB', level: 85, color: '#4ec9b0' },
+        { name: 'Firebase', level: 82, color: '#569cd6' },
+        { name: 'Playwright', level: 88, color: '#ce9178' },
+        { name: 'n8n Automation', level: 90, color: '#c586c0' },
+        { name: 'WebRTC', level: 78, color: '#dcdcaa' },
+        { name: 'Socket.io', level: 85, color: '#4ec9b0' },
       ],
     },
   ];
@@ -86,33 +96,16 @@ export function SkillsPage() {
                 {category.title}
               </h2>
 
-              <div className="space-y-5">
+              <div className="space-y-3">
                 {category.skills.map((skill, skillIndex) => (
                   <motion.div
                     key={skillIndex}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: catIndex * 0.1 + skillIndex * 0.05, duration: 0.3 }}
+                    className="flex items-center p-3 bg-[#252526] border border-[#3c3c3c] rounded hover:border-[#4ec9b0] transition-colors"
                   >
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-[#d4d4d4] text-sm">{skill.name}</span>
-                      <span className="text-sm font-mono" style={{ color: skill.color }}>
-                        {skill.level}%
-                      </span>
-                    </div>
-                    <div className="h-2 bg-[#2d2d2d] rounded-full overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${skill.level}%` }}
-                        transition={{
-                          delay: catIndex * 0.1 + skillIndex * 0.05 + 0.2,
-                          duration: 0.8,
-                          ease: 'easeOut',
-                        }}
-                        className="h-full rounded-full"
-                        style={{ backgroundColor: skill.color }}
-                      />
-                    </div>
+                    <span className="text-[#d4d4d4] text-sm font-medium">{skill.name}</span>
                   </motion.div>
                 ))}
               </div>

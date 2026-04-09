@@ -1,203 +1,170 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Sparkles, X, Minimize2 } from 'lucide-react';
-import { ChatMessage } from '@/lib/types';
-import { getChatResponse, generateChatId } from '@/lib/chatbot';
-import { trackChatInteraction } from '@/lib/analytics';
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Send, Sparkles, X } from 'lucide-react';
+
+import { trackChat, trackClick } from '@/lib/analytics';
+import { generateChatId, getChatContext } from '@/lib/chatbot';
 import { CHAT_PROMPTS } from '@/lib/constants';
+import { ChatMessage } from '@/lib/types';
 
 interface ChatbotProps {
+  currentPage: string;
   onClose: () => void;
 }
 
-export function Chatbot({ onClose }: ChatbotProps) {
+export function Chatbot({ currentPage, onClose }: ChatbotProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: generateChatId(),
-      content: "Hi! I'm Pranav's Copilot 👋\n\nAsk me anything about his projects, skills, experience, or achievements.",
+      content:
+        "Hi, I'm the portfolio copilot. Ask about Pranav's work, projects, stack, or how to get in touch.",
       role: 'assistant',
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
     },
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [width, setWidth] = useState(384); // Default width (w-96)
-  const [isResizing, setIsResizing] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const chatbotRef = useRef<HTMLDivElement>(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isTyping]);
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (isResizing && chatbotRef.current) {
-        const newWidth = window.innerWidth - e.clientX;
-        if (newWidth >= 300 && newWidth <= 600) {
-          setWidth(newWidth);
-        }
-      }
-    };
-
-    const handleMouseUp = () => {
-      setIsResizing(false);
-    };
-
-    if (isResizing) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
+  const sendMessage = async (value?: string) => {
+    const message = (value || input).trim();
+    if (!message) {
+      return;
     }
 
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [isResizing]);
-
-  const handleResizeStart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsResizing(true);
-  };
-
-  const handleSendMessage = async (messageText?: string) => {
-    const userMessage = messageText || input.trim();
-    if (!userMessage) return;
-
-    const newUserMessage: ChatMessage = {
+    const userMessage: ChatMessage = {
       id: generateChatId(),
-      content: userMessage,
+      content: message,
       role: 'user',
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
     };
 
-    setMessages((prev) => [...prev, newUserMessage]);
+    setMessages((previous) => [...previous, userMessage]);
     setInput('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      const response = getChatResponse(userMessage);
-      const botMessage: ChatMessage = {
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message,
+          context: getChatContext(),
+        }),
+      });
+
+      const payload = (await response.json()) as { message?: string };
+      const assistantMessage: ChatMessage = {
         id: generateChatId(),
-        content: response,
+        content: payload.message || 'I hit a small issue, but I can still help with projects, skills, or contact details.',
         role: 'assistant',
-        timestamp: new Date(),
+        timestamp: new Date().toISOString(),
       };
 
-      setMessages((prev) => [...prev, botMessage]);
+      setMessages((previous) => [...previous, assistantMessage]);
+      trackChat(currentPage, {
+        action: 'chat_message',
+        query: message,
+      });
+    } catch {
+      setMessages((previous) => [
+        ...previous,
+        {
+          id: generateChatId(),
+          content: 'The assistant fell back to offline mode. Ask again and I can still answer from the local portfolio context.',
+          role: 'assistant',
+          timestamp: new Date().toISOString(),
+        },
+      ]);
+    } finally {
       setIsTyping(false);
-
-      trackChatInteraction(userMessage, response);
-    }, 800);
-  };
-
-  const handlePromptClick = (prompt: string) => {
-    handleSendMessage(prompt);
+    }
   };
 
   return (
-    <div 
-      ref={chatbotRef}
-      className="bg-[#252526] border-l border-[#3c3c3c] flex flex-col h-full relative"
-      style={{ width: `${width}px` }}
-    >
-      {/* Resize Handle */}
-      <div
-        className="absolute left-0 top-0 bottom-0 w-1 bg-transparent hover:bg-[#007acc] cursor-col-resize z-10 transition-colors"
-        onMouseDown={handleResizeStart}
-      />
-
-      <div className="p-4 border-b border-[#3c3c3c] flex items-center justify-between">
+    <aside className="flex h-full min-h-0 flex-col bg-[var(--vscode-panel)]">
+      <div className="flex items-center justify-between border-b border-[var(--vscode-border)] px-4 py-3">
         <div className="flex items-center gap-2">
-          <Sparkles size={18} className="text-[#007acc]" />
-          <h2 className="text-sm font-medium text-[#d4d4d4]">Pranav's AI Assistant</h2>
+          <Sparkles size={16} className="text-[var(--vscode-accent)]" />
+          <div>
+            <div className="text-[12px] text-white">Portfolio Assistant</div>
+            <div className="text-[11px] text-[var(--vscode-muted)]">Copilot-style side panel</div>
+          </div>
         </div>
-        <div className="flex items-center gap-1">
-          <button
-            onClick={onClose}
-            className="p-1 hover:bg-[#3c3c3c] rounded transition-colors"
-          >
-            <X size={16} className="text-[#858585]" />
-          </button>
-        </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            onClose();
+            trackClick(currentPage, {
+              action: 'chat_panel_close',
+            });
+          }}
+          className="rounded p-1 text-[var(--vscode-muted)] transition hover:bg-[#343434] hover:text-white"
+          aria-label="Close assistant"
+        >
+          <X size={16} />
+        </button>
       </div>
 
-      <div className="px-3 py-2 border-b border-[#3c3c3c]">
-        <p className="text-xs text-[#858585]">
-          WORKSPACE <span className="text-[#007acc]">• portfolio-pranav-thakwani</span>
-        </p>
+      <div className="border-b border-[var(--vscode-border)] px-4 py-2 text-[11px] text-[var(--vscode-muted)]">
+        CONTEXT: bio + projects + skills + contact
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        <AnimatePresence mode="popLayout">
+      <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+        <AnimatePresence initial={false}>
           {messages.map((message) => (
             <motion.div
               key={message.id}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              exit={{ opacity: 0 }}
+              className={`flex ${message.role === 'assistant' ? 'justify-start' : 'justify-end'}`}
             >
               <div
-                className={`max-w-[85%] rounded-lg p-3 ${
-                  message.role === 'user'
-                    ? 'bg-[#007acc] text-white'
-                    : 'bg-[#2d2d2d] text-[#d4d4d4]'
+                className={`max-w-[88%] rounded-md border px-3 py-2 text-[12px] leading-6 ${
+                  message.role === 'assistant'
+                    ? 'border-[#3a3a3a] bg-[#202020] text-[var(--vscode-text)]'
+                    : 'border-[#0e639c] bg-[#094771] text-white'
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
+                {message.content}
               </div>
             </motion.div>
           ))}
         </AnimatePresence>
 
         {isTyping && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex justify-start"
-          >
-            <div className="bg-[#2d2d2d] rounded-lg p-3">
-              <div className="flex gap-1">
-                <motion.div
-                  animate={{ opacity: [0.4, 1, 0.4] }}
-                  transition={{ duration: 1, repeat: Infinity, delay: 0 }}
-                  className="w-2 h-2 bg-[#858585] rounded-full"
-                />
-                <motion.div
-                  animate={{ opacity: [0.4, 1, 0.4] }}
-                  transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
-                  className="w-2 h-2 bg-[#858585] rounded-full"
-                />
-                <motion.div
-                  animate={{ opacity: [0.4, 1, 0.4] }}
-                  transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
-                  className="w-2 h-2 bg-[#858585] rounded-full"
-                />
-              </div>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
+            <div className="rounded-md border border-[#3a3a3a] bg-[#202020] px-3 py-2 text-[12px] text-[var(--vscode-muted)]">
+              typing...
             </div>
           </motion.div>
         )}
 
-        <div ref={messagesEndRef} />
+        <div ref={scrollRef} />
       </div>
 
       {messages.length === 1 && (
-        <div className="px-4 pb-4">
-          <p className="text-xs text-[#858585] mb-2">Suggested prompts:</p>
-          <div className="grid grid-cols-2 gap-2">
-            {CHAT_PROMPTS.map((prompt, index) => (
+        <div className="border-t border-[var(--vscode-border)] px-4 py-3">
+          <div className="mb-2 text-[11px] uppercase tracking-[0.15em] text-[var(--vscode-muted)]">
+            Suggestions
+          </div>
+          <div className="grid gap-2">
+            {CHAT_PROMPTS.map((prompt) => (
               <button
-                key={index}
-                onClick={() => handlePromptClick(prompt)}
-                className="text-left text-xs p-2 bg-[#2d2d2d] hover:bg-[#3c3c3c] text-[#d4d4d4] rounded border border-[#3c3c3c] transition-colors"
+                key={prompt}
+                type="button"
+                onClick={() => sendMessage(prompt)}
+                className="rounded border border-[#3a3a3a] bg-[#202020] px-3 py-2 text-left text-[12px] text-[var(--vscode-text)] transition hover:border-[#0e639c] hover:bg-[#252b32]"
               >
                 {prompt}
               </button>
@@ -206,29 +173,29 @@ export function Chatbot({ onClose }: ChatbotProps) {
         </div>
       )}
 
-      <div className="p-4 border-t border-[#3c3c3c]">
-        <div className="flex gap-2">
+      <div className="border-t border-[var(--vscode-border)] p-4">
+        <div className="flex items-center gap-2 rounded-md border border-[#3a3a3a] bg-[#1f1f1f] p-2">
           <input
-            ref={inputRef}
-            type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-            placeholder="Ask about Pranav's projects, experience, skills..."
-            className="flex-1 bg-[#3c3c3c] text-[#d4d4d4] text-sm px-3 py-2 rounded border border-[#3c3c3c] focus:border-[#007acc] outline-none placeholder:text-[#858585]"
+            onChange={(event) => setInput(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                void sendMessage();
+              }
+            }}
+            placeholder="Ask about work, skills, projects, contact..."
+            className="w-full bg-transparent text-[12px] text-[var(--vscode-text)] outline-none placeholder:text-[var(--vscode-muted)]"
           />
           <button
-            onClick={() => handleSendMessage()}
-            disabled={!input.trim()}
-            className="p-2 bg-[#007acc] text-white rounded hover:bg-[#0098ff] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            type="button"
+            onClick={() => void sendMessage()}
+            className="rounded bg-[var(--vscode-accent)] p-2 text-white transition hover:brightness-110"
+            aria-label="Send message"
           >
-            <Send size={18} />
+            <Send size={14} />
           </button>
         </div>
-        <p className="text-[10px] text-[#858585] mt-2">
-          AI can make mistakes. Contact Pranav directly for important info.
-        </p>
       </div>
-    </div>
+    </aside>
   );
 }

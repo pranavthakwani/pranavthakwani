@@ -1,44 +1,70 @@
-"use client";
+'use client';
 
+import { Sparkles } from 'lucide-react';
 import {
+  VscExtensions,
   VscFiles,
   VscSearch,
   VscSourceControl,
-  VscExtensions,
-} from "react-icons/vsc";
-import { useState } from "react";
+} from 'react-icons/vsc';
+
+import { ActivityPanelId } from '@/lib/types';
 
 interface ActivityBarProps {
-  activePanel: string;
-  onPanelChange: (panel: string) => void;
+  activePanel: ActivityPanelId;
+  isChatOpen: boolean;
+  onPanelChange: (panel: ActivityPanelId, event?: React.MouseEvent<HTMLButtonElement>) => void;
+  onToggleChat: (event?: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export default function ActivityBar({ activePanel, onPanelChange }: ActivityBarProps) {
-  const [active, setActive] = useState(activePanel);
-  const items = [
-    { id: "files", icon: <VscFiles size={22} /> },
-    { id: "search", icon: <VscSearch size={22} /> },
-    { id: "git", icon: <VscSourceControl size={22} /> },
-    { id: "extensions", icon: <VscExtensions size={22} /> },
-  ];
+const panelItems: Array<{
+  id: ActivityPanelId;
+  label: string;
+  icon: typeof VscFiles;
+}> = [
+  { id: 'explorer', label: 'Explorer', icon: VscFiles },
+  { id: 'search', label: 'Search', icon: VscSearch },
+  { id: 'source-control', label: 'Source Control', icon: VscSourceControl },
+  { id: 'extensions', label: 'Extensions', icon: VscExtensions },
+];
 
+export default function ActivityBar({
+  activePanel,
+  isChatOpen,
+  onPanelChange,
+  onToggleChat,
+}: ActivityBarProps) {
   return (
-    <div className="w-[50px] bg-[#333333] flex flex-col items-center py-3 gap-6 border-r border-[#2a2a2a]">
+    <aside className="flex w-12 flex-col items-center justify-between border-r border-[var(--vscode-border)] bg-[var(--vscode-activity)] py-3">
+      <div className="flex flex-col items-center gap-1">
+        {panelItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = activePanel === item.id;
 
-      {items.map((item) => (
-        <div
-          key={item.id}
-          onClick={() => onPanelChange(item.id)}
-          className={`relative cursor-pointer text-gray-400 hover:text-white transition`}
-        >
-          {item.icon}
+          return (
+            <button
+              key={item.id}
+              type="button"
+              onClick={(event) => onPanelChange(item.id, event)}
+              className="group relative flex h-11 w-full items-center justify-center pl-2 text-[var(--vscode-muted)] transition hover:text-white"
+              aria-label={item.label}
+            >
+              {isActive && <span className="absolute left-0 top-1 bottom-1 w-[2px] bg-[var(--vscode-accent)]" />}
+              <Icon size={22} className={isActive ? 'text-white' : ''} />
+            </button>
+          );
+        })}
+      </div>
 
-          {/* Active Indicator */}
-          {active === item.id && (
-            <span className="absolute left-[-10px] top-0 h-full w-[3px] bg-[#007acc]" />
-          )}
-        </div>
-      ))}
-    </div>
+      <button
+        type="button"
+        onClick={onToggleChat}
+        className="group relative flex h-11 w-full items-center justify-center pl-2 text-[var(--vscode-muted)] transition hover:text-white"
+        aria-label="Toggle assistant"
+      >
+        {isChatOpen && <span className="absolute left-0 top-1 bottom-1 w-[2px] bg-[var(--vscode-accent)]" />}
+        <Sparkles size={18} className={isChatOpen ? 'text-white' : ''} />
+      </button>
+    </aside>
   );
 }

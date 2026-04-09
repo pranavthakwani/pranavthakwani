@@ -1,11 +1,8 @@
-import { Metadata } from 'next';
-import { ExperiencePage } from '@/components/pages/ExperiencePage';
+import { ExperiencePage as ExperienceContent } from '@/components/pages/ExperiencePage';
+import { buildPortfolioMetadata } from '@/lib/portfolio';
 
-export const metadata: Metadata = {
-  title: 'Experience - Pranav Thakwani',
-  description: 'Work experience and professional journey of Pranav Thakwani, including roles at KORE Mobile and freelance projects.',
-};
+export const metadata = buildPortfolioMetadata('experience');
 
-export default function Experience() {
-  return <ExperiencePage />;
+export default function ExperienceRoute() {
+  return <ExperienceContent />;
 }
